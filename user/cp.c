@@ -27,7 +27,7 @@ main(int argc, char *argv[])
     exit(0);
   }
 
-  dst_fd = open(argv[2], O_CREATE | O_WRONLY);
+  dst_fd = open(argv[2], O_WRONLY);
   if(dst_fd < 0){
     printf("cp: cannot open destination file %s\n", argv[2]);
     close(src_fd);
