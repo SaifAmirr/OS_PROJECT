@@ -143,6 +143,7 @@ UPROGS=\
 	$U/_sleep\
 	$U/_fact\
 	$U/_touch\
+	$U/_cp\
 
 
 fs.img: mkfs/mkfs README $(UPROGS)
