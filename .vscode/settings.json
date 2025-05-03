@@ -13,6 +13,7 @@
     "files.trimFinalNewlines": true,
     "files.insertFinalNewline": true,
     "files.associations": {
-        "stat.h": "c"
+        "stat.h": "c",
+        "fs.h": "c"
     }
 }
