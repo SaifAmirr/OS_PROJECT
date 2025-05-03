@@ -11,5 +11,9 @@
     "editor.trimAutoWhitespace": true,
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    "files.associations": {
+        "stat.h": "c",
+        "fs.h": "c"
+    }
 }
