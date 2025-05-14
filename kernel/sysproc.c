@@ -91,3 +91,13 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_getppid(void)
+{
+  if(myproc()->parent!=0){
+    return myproc()->parent->pid;
+  }
+  printf("no parent found\n");
+  return -1;
+}
