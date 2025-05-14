@@ -148,6 +148,8 @@ UPROGS=\
 	$U/_find\
 	$U/_mv\
 	$U/_kbd\
+	$U/_countsyscall\
+	$U/_getppid\
 
 
 fs.img: mkfs/mkfs README $(UPROGS)
