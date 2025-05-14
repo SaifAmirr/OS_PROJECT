@@ -6,6 +6,7 @@
 #include "spinlock.h"
 #include "proc.h"
 
+
 uint64
 sys_exit(void)
 {
@@ -100,4 +101,16 @@ sys_getppid(void)
   }
   printf("no parent found\n");
   return -1;
+}
+
+uint64
+sys_getptable(void)
+{
+  int n;
+  uint64 buf;
+
+  argint(0, &n);      // get the first argument (nproc)
+  argaddr(1, &buf);   // get the second argument (char *buffer)
+
+  return getptable(n, (char *)buf);
 }
