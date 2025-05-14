@@ -150,6 +150,7 @@ UPROGS=\
 	$U/_kbd\
 	$U/_countsyscall\
 	$U/_getppid\
+	$U/_ps\
 
 
 fs.img: mkfs/mkfs README $(UPROGS)
