@@ -40,4 +40,8 @@ entry("kbdint");
 entry("countsyscall");
 entry("getppid");
 entry("getptable");
+<<<<<<< HEAD
 entry("datetime");
+=======
+entry("random");
+>>>>>>> origin/main

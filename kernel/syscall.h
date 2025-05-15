@@ -24,4 +24,8 @@
 #define SYS_countsyscall 23
 #define SYS_getppid 24
 #define SYS_getptable 25
+<<<<<<< HEAD
 #define SYS_datetime 26
+=======
+#define SYS_random 26
+>>>>>>> origin/main

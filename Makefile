@@ -29,7 +29,7 @@ OBJS = \
   $K/kernelvec.o \
   $K/plic.o \
   $K/virtio_disk.o \
-  $K/sysutil.o
+  $K/sysutil.o \
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
 # perhaps in /opt/riscv/bin
@@ -153,9 +153,13 @@ UPROGS=\
 	$U/_countsyscall\
 	$U/_getppid\
 	$U/_ps\
+<<<<<<< HEAD
 	$U/_getdatetime\
 
 
+=======
+	$U/_rand
+>>>>>>> origin/main
 
 
 fs.img: mkfs/mkfs README $(UPROGS)
