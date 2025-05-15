@@ -106,6 +106,7 @@ extern uint64 sys_kbdint(void);
 extern uint64 sys_countsyscall(void);
 extern uint64 sys_getppid(void);
 extern uint64 sys_getptable(void);
+extern uint64 sys_random(void);
 
 
 // An array mapping syscall numbers from syscall.h
@@ -136,6 +137,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_countsyscall]  sys_countsyscall,
 [SYS_getppid]  sys_getppid,
 [SYS_getptable]  sys_getptable,
+[SYS_random]  sys_random,
 };
 
 void
