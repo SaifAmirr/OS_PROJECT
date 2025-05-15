@@ -106,6 +106,7 @@ extern uint64 sys_kbdint(void);
 extern uint64 sys_countsyscall(void);
 extern uint64 sys_getppid(void);
 extern uint64 sys_getptable(void);
+extern uint64 sys_datetime(void);
 extern uint64 sys_random(void);
 
 
@@ -137,7 +138,8 @@ static uint64 (*syscalls[])(void) = {
 [SYS_countsyscall]  sys_countsyscall,
 [SYS_getppid]  sys_getppid,
 [SYS_getptable]  sys_getptable,
-[SYS_random]  sys_random,
+[SYS_datetime]   sys_datetime,
+[SYS_random]  sys_random
 };
 
 void

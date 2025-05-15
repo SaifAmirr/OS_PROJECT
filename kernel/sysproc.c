@@ -5,6 +5,9 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "datetime.h"
+#include "memlayout.h"
+
 
 
 uint64
@@ -113,4 +116,82 @@ sys_getptable(void)
   argaddr(1, &buf);   // get the second argument (char *buffer)
 
   return getptable(n, (char *)buf);
+}
+
+uint64
+read_mtime(void) {
+  return *(volatile uint64 *)CLINT_MTIME_VADDR;
+}
+
+
+// Helper: days in a month considering leap years
+static int days_in_month(int year, int month) {
+  static const int days_per_month[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+  if (month != 2)
+    return days_per_month[month - 1];
+  // Leap year check
+  if ((year % 400) == 0 || ((year % 4) == 0 && (year % 100) != 0))
+    return 29;
+  return 28;
+}
+
+
+
+
+void unix_to_rtc(uint64 unix_time, struct datetime *r) {
+  int days = unix_time / 86400;
+  int seconds = unix_time % 86400;
+
+  int year = 1970;
+  while (1) {
+    int days_this_year = (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) ? 366 : 365;
+    if (days < days_this_year)
+      break;
+    days -= days_this_year;
+    year++;
+  }
+
+  int month = 1;
+  while (1) {
+    int dim = days_in_month(year, month);
+    if (days < dim)
+      break;
+    days -= dim;
+    month++;
+  }
+
+  r->year = year;
+  r->month = month;
+  r->day = days + 1;
+
+  r->hour = seconds / 3600;
+  r->minute = (seconds % 3600) / 60;
+  r->second = seconds % 60;
+}
+
+extern uint ticks;
+
+uint64
+sys_datetime(void)
+{
+  uint64 user_dst;  // pointer to user struct
+  argaddr(0, &user_dst);
+
+  uint curr = BOOT_EPOCH + (ticks / 100);
+
+
+
+
+  struct datetime dt;
+  unix_to_rtc(curr, &dt);
+
+  printf("Kernel datetime: %d-%d-%d %d:%d:%d\n",
+         dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second);
+
+  if (copyout(myproc()->pagetable, user_dst, (char *)&dt, sizeof(dt)) < 0) {
+    printf("copyout failed\n");
+    return -1;
+  }
+
+  return 0;
 }

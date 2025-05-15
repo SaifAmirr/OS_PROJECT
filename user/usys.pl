@@ -40,4 +40,5 @@ entry("kbdint");
 entry("countsyscall");
 entry("getppid");
 entry("getptable");
+entry("datetime");
 entry("random");
