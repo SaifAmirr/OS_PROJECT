@@ -1,4 +1,4 @@
-
+#include "kernel/datetime.h"
 struct stat;
 struct uproc;
 
@@ -27,8 +27,8 @@ int uptime(void);
 int kbdint(void);
 int countsyscall(void);
 int getppid(void);
-
 int getptable(int nproc, struct uproc *table);
+int datetime(struct datetime *dt);
 
 // ulib.c
 int stat(const char*, struct stat*);
