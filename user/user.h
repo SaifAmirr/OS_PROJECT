@@ -27,8 +27,8 @@ int uptime(void);
 int kbdint(void);
 int countsyscall(void);
 int getppid(void);
-
 int getptable(int nproc, struct uproc *table);
+int random(void);
 
 // ulib.c
 int stat(const char*, struct stat*);
