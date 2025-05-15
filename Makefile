@@ -153,13 +153,8 @@ UPROGS=\
 	$U/_countsyscall\
 	$U/_getppid\
 	$U/_ps\
-<<<<<<< HEAD
 	$U/_getdatetime\
-
-
-=======
-	$U/_rand
->>>>>>> origin/main
+	$U/_rand\
 
 
 fs.img: mkfs/mkfs README $(UPROGS)

@@ -28,11 +28,8 @@ int kbdint(void);
 int countsyscall(void);
 int getppid(void);
 int getptable(int nproc, struct uproc *table);
-<<<<<<< HEAD
 int datetime(struct datetime *dt);
-=======
 int random(void);
->>>>>>> origin/main
 
 // ulib.c
 int stat(const char*, struct stat*);
