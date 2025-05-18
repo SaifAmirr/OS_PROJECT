@@ -1,3 +1,9 @@
+#define SCHED_ROUND_ROBIN 0
+#define SCHED_FCFS        1
+
+extern int sched_mode;
+
+
 // Saved registers for kernel context switches.
 struct context {
   uint64 ra;
@@ -91,6 +97,10 @@ struct proc {
   int killed;                  // If non-zero, have been killed
   int xstate;                  // Exit status to be returned to parent's wait
   int pid;                     // Process ID
+  uint c_time;
+  uint run_time;
+  uint e_time;
+  uint turnaround_time;
 
   // wait_lock must be held when using this:
   struct proc *parent;         // Parent process
