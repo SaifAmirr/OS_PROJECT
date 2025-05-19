@@ -6,10 +6,17 @@
 #include "proc.h"
 #include "defs.h"
 #include "ptinfo.h"
+
 extern uint ticks;
 extern uint run_time;
+extern uint e_time;
+extern uint turnaround_time;
+extern uint waiting_time;
+
+
 uint total_turnaround = 0;
 uint finished_processes = 0;
+uint total_waiting = 0;
 int turnaround_printed=0;
 
 struct cpu cpus[NCPU];
@@ -369,9 +376,15 @@ exit(int status)
   p->e_time = ticks;
   release(&tickslock);
 
+
+
   p->turnaround_time = p->e_time - p->c_time;
+  p->waiting_time = p->turnaround_time - p->run_time;
   total_turnaround += p->turnaround_time;
+  total_waiting += p->waiting_time;
   finished_processes++;
+
+
 
 
 
@@ -481,7 +494,7 @@ update_time()
   }
 }
 
-int sched_mode=SCHED_FCFS;  // Assign the chosen scheduler here
+int sched_mode=SCHED_ROUND_ROBIN;  // Assign the chosen scheduler here
 struct proc *choose_next_process() {
   struct proc *p;
   if (sched_mode == SCHED_ROUND_ROBIN) {
@@ -799,4 +812,11 @@ getptable(int nproc, char *buffer)
     return 0;
 
   return 1;
+}
+
+void print_averages(void) {
+  if (finished_processes > 0) {
+    printf("Average Turnaround Time: %d\n", total_turnaround / finished_processes);
+    printf("Average Waiting Time: %d\n", total_waiting / finished_processes);
+  }
 }

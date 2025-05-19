@@ -108,6 +108,7 @@ extern uint64 sys_getppid(void);
 extern uint64 sys_getptable(void);
 extern uint64 sys_datetime(void);
 extern uint64 sys_random(void);
+extern uint64 sys_print_averages(void);
 
 
 // An array mapping syscall numbers from syscall.h
@@ -139,7 +140,8 @@ static uint64 (*syscalls[])(void) = {
 [SYS_getppid]  sys_getppid,
 [SYS_getptable]  sys_getptable,
 [SYS_datetime]   sys_datetime,
-[SYS_random]  sys_random
+[SYS_random]  sys_random,
+[SYS_print_averages] sys_print_averages
 };
 
 void
