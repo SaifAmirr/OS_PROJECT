@@ -6,6 +6,11 @@
 #include "proc.h"
 #include "defs.h"
 #include "ptinfo.h"
+extern uint ticks;
+extern uint run_time;
+uint total_turnaround = 0;
+uint finished_processes = 0;
+int turnaround_printed=0;
 
 struct cpu cpus[NCPU];
 
@@ -110,6 +115,7 @@ allocpid()
 static struct proc*
 allocproc(void)
 {
+
   struct proc *p;
 
   for(p = proc; p < &proc[NPROC]; p++) {
@@ -125,6 +131,8 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
+  // Only count user processes (PID > 1 to skip init)
+
 
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -146,6 +154,9 @@ found:
   memset(&p->context, 0, sizeof(p->context));
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
+
+  p->c_time = ticks;
+  p->run_time = 0;
 
   return p;
 }
@@ -351,6 +362,20 @@ exit(int status)
 
   if(p == initproc)
     panic("init exiting");
+  extern uint ticks;
+  extern struct spinlock tickslock;
+
+  acquire(&tickslock);
+  p->e_time = ticks;
+  release(&tickslock);
+
+  p->turnaround_time = p->e_time - p->c_time;
+  total_turnaround += p->turnaround_time;
+  finished_processes++;
+
+
+
+
 
   // Close all open files.
   for(int fd = 0; fd < NOFILE; fd++){
@@ -443,6 +468,53 @@ wait(uint64 addr)
 //  - eventually that process transfers control
 //    via swtch back to the scheduler.
 void
+update_time()
+{
+  struct proc* p;
+  for (p = proc; p < &proc[NPROC]; p++) {
+    acquire(&p->lock);
+    if (p->state == RUNNING) {
+      p->run_time++;
+    }
+
+    release(&p->lock);
+  }
+}
+
+int sched_mode=SCHED_FCFS;  // Assign the chosen scheduler here
+struct proc *choose_next_process() {
+  struct proc *p;
+  if (sched_mode == SCHED_ROUND_ROBIN) {
+    for (p = proc; p < &proc[NPROC]; p++) {
+      // printf("Checking pid %d (state=%d, c_time=%u)\n", p->pid, p->state, p->c_time);
+      if (p->state == RUNNABLE) {
+        return p; // lock held
+      }
+
+    }
+  }
+  else if (sched_mode == SCHED_FCFS) {
+    struct proc *minproc=0;
+    for (p = proc; p < &proc[NPROC]; p++){
+      if(p->state==RUNNABLE){
+        if(minproc==0 || p->c_time < minproc->c_time){
+          minproc=p;
+        }
+      }
+    }
+    return minproc;
+  }
+
+
+
+
+  return 0;
+}
+
+
+
+
+void
 scheduler(void)
 {
   struct proc *p;
@@ -456,12 +528,13 @@ scheduler(void)
     intr_on();
 
     int found = 0;
-    for(p = proc; p < &proc[NPROC]; p++) {
+
+    p = choose_next_process();
+
+    if(p != 0) {
       acquire(&p->lock);
-      if(p->state == RUNNABLE) {
-        // Switch to chosen process.  It is the process's job
-        // to release its lock and then reacquire it
-        // before jumping back to us.
+
+      if (p->state == RUNNABLE) {
         p->state = RUNNING;
         c->proc = p;
         swtch(&c->context, &p->context);
@@ -474,6 +547,7 @@ scheduler(void)
       release(&p->lock);
     }
     if(found == 0) {
+
       // nothing to run; stop running on this core until an interrupt.
       intr_on();
       asm volatile("wfi");
@@ -690,7 +764,7 @@ procdump(void)
       state = states[p->state];
     else
       state = "???";
-    printf("%d %s %s", p->pid, state, p->name);
+    printf("%d %s %s creation_time = %u", p->pid, state, p->name, p->c_time);
     printf("\n");
   }
 }
