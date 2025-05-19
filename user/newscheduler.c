@@ -4,6 +4,8 @@
 #include "kernel/fcntl.h"
 
 
+
+
 int main(int argc, char *argv[]) {
 
   int pid;
@@ -41,6 +43,9 @@ int main(int argc, char *argv[]) {
     pid = wait(0);
     printf("[pid=%d] terminated\n", pid);
   }
+
+  print_averages();
+  printf("All processes terminated\n");
 
   exit(0);
 }

@@ -101,6 +101,7 @@ struct proc {
   uint run_time;
   uint e_time;
   uint turnaround_time;
+  uint waiting_time;
 
   // wait_lock must be held when using this:
   struct proc *parent;         // Parent process

@@ -195,3 +195,12 @@ sys_datetime(void)
 
   return 0;
 }
+
+extern void print_averages(void);
+
+uint64
+sys_print_averages(void)
+{
+  print_averages();
+  return 0;
+}

@@ -30,6 +30,7 @@ int getppid(void);
 int getptable(int nproc, struct uproc *table);
 int datetime(struct datetime *dt);
 int random(void);
+void print_averages(void);
 
 // ulib.c
 int stat(const char*, struct stat*);
