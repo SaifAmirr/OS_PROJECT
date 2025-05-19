@@ -8,7 +8,7 @@
 #include "datetime.h"
 #include "memlayout.h"
 
-
+extern struct proc proc[NPROC];
 
 uint64
 sys_exit(void)
@@ -203,4 +203,23 @@ sys_print_averages(void)
 {
   print_averages();
   return 0;
+}
+
+uint64
+sys_setpriority(void)
+{
+  int pid, new_prio;
+  argint(0, &pid);
+  argint(1, &new_prio);
+
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC]; p++) {
+    if(p->pid == pid) {
+      acquire(&p->lock);
+      p->priority = new_prio;
+      release(&p->lock);
+      return 0;
+    }
+  }
+  return -1; // PID not found
 }

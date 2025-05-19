@@ -156,6 +156,7 @@ UPROGS=\
 	$U/_getdatetime\
 	$U/_rand\
 	$U/_newscheduler\
+	$U/_prische\
 
 
 fs.img: mkfs/mkfs README $(UPROGS)

@@ -1,5 +1,6 @@
 #define SCHED_ROUND_ROBIN 0
 #define SCHED_FCFS        1
+#define SCHED_PRIORITY    2
 
 extern int sched_mode;
 
@@ -102,6 +103,7 @@ struct proc {
   uint e_time;
   uint turnaround_time;
   uint waiting_time;
+  int priority;              // Process priority
 
   // wait_lock must be held when using this:
   struct proc *parent;         // Parent process

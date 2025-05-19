@@ -27,3 +27,4 @@
 #define SYS_datetime 26
 #define SYS_random 27
 #define SYS_print_averages 28
+#define SYS_setpriority 29

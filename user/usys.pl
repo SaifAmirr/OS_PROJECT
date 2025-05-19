@@ -43,3 +43,4 @@ entry("getptable");
 entry("datetime");
 entry("random");
 entry("print_averages");
+entry("setpriority");

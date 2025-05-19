@@ -31,6 +31,7 @@ int getptable(int nproc, struct uproc *table);
 int datetime(struct datetime *dt);
 int random(void);
 void print_averages(void);
+int setpriority(int pid, int priority);
 
 // ulib.c
 int stat(const char*, struct stat*);
