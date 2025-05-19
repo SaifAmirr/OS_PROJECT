@@ -494,7 +494,7 @@ update_time()
   }
 }
 
-int sched_mode=SCHED_ROUND_ROBIN;  // Assign the chosen scheduler here
+int sched_mode=SCHED_PRIORITY;  // Assign the chosen scheduler here
 struct proc *choose_next_process() {
   struct proc *p;
   if (sched_mode == SCHED_ROUND_ROBIN) {
@@ -517,6 +517,23 @@ struct proc *choose_next_process() {
     }
     return minproc;
   }
+
+  else if (sched_mode == SCHED_PRIORITY) {
+  struct proc *minproc = 0;
+  for (p = proc; p < &proc[NPROC]; p++) {
+    if(p->state == RUNNABLE) {
+      if(minproc == 0 || p->priority < minproc->priority) {
+        minproc = p;
+      }
+    }
+  }
+  return minproc;
+}
+
+
+
+
+
 
 
 

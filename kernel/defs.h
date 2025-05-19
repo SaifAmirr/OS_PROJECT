@@ -108,7 +108,8 @@ int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
 void            procdump(void);
 int             getptable(int nproc, char *buffer);
 void            update_time(void);
-
+void            print_averages(void);
+uint64            sys_setpriority(void);
 
 
 
