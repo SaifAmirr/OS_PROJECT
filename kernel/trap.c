@@ -6,6 +6,8 @@
 #include "proc.h"
 #include "defs.h"
 
+extern struct proc proc[NPROC];
+
 struct spinlock tickslock;
 uint ticks;
 
@@ -77,8 +79,21 @@ usertrap(void)
     exit(-1);
 
   // give up the CPU if this is a timer interrupt.
-  if(which_dev == 2)
+  if (which_dev == 2) {
+  if (sched_mode == SCHED_PRIORITY) {
+    struct proc *p = myproc();
+    int myprio = p->priority;
+    struct proc *q;
+    for (q = proc; q < &proc[NPROC]; q++) {
+      if (q->state == RUNNABLE && q->priority < myprio) {
+        yield();
+        break;
+      }
+    }
+  } else {
     yield();
+  }
+}
 
   usertrapret();
 }
@@ -151,8 +166,21 @@ kerneltrap()
   }
 
   // give up the CPU if this is a timer interrupt.
-  if(which_dev == 2 && myproc() != 0)
+  if (which_dev == 2 && myproc() != 0) {
+  if (sched_mode == SCHED_PRIORITY) {
+    struct proc *p = myproc();
+    int myprio = p->priority;
+    struct proc *q;
+    for (q = proc; q < &proc[NPROC]; q++) {
+      if (q->state == RUNNABLE && q->priority < myprio) {
+        yield();
+        break;
+      }
+    }
+  } else {
     yield();
+  }
+}
 
   // the yield() may have caused some traps to occur,
   // so restore trap registers for use by kernelvec.S's sepc instruction.

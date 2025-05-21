@@ -494,7 +494,7 @@ update_time()
   }
 }
 
-int sched_mode=SCHED_FCFS;  // Assign the chosen scheduler here
+int sched_mode=SCHED_PRIORITY;  // Assign the chosen scheduler here
 struct proc *choose_next_process() {
   struct proc *p;
   if (sched_mode == SCHED_ROUND_ROBIN) {
