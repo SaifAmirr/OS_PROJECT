@@ -6,7 +6,7 @@
 uint64
 extern kbd_int_count;
 extern int syscall_count;
-static uint64 seed = 1;
+static unsigned long int next = 1;
 
 uint64
 sys_kbdint(void){
@@ -20,6 +20,6 @@ sys_countsyscall(void){
 
 uint64
 sys_random(void){
-  seed = (1664525 * seed + 1013904223);
-    return seed;
+  next = next * 1103515245 + 12345;
+  return (uint64)(next/65536) % 32768;
 }
