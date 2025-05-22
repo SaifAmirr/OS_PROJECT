@@ -188,6 +188,7 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
+
 }
 
 // Create a user page table for a given process, with no user memory,
@@ -522,7 +523,8 @@ struct proc *choose_next_process() {
   struct proc *minproc = 0;
   for (p = proc; p < &proc[NPROC]; p++) {
     if(p->state == RUNNABLE) {
-      if(minproc == 0 || p->priority < minproc->priority) {
+      if(minproc == 0 || p->priority < minproc->priority)
+       {
         minproc = p;
       }
     }
@@ -835,5 +837,8 @@ void print_averages(void) {
   if (finished_processes > 0) {
     printf("Average Turnaround Time: %d\n", total_turnaround / finished_processes);
     printf("Average Waiting Time: %d\n", total_waiting / finished_processes);
+      total_turnaround=0;
+      finished_processes=0;
+      total_waiting=0;
   }
 }

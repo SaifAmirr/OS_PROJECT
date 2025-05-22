@@ -43,6 +43,11 @@ void move(char *path1, char *path2) {
 }
 
 int main(int argc, char *argv[]) {
+
+  if (argc == 2 && strcmp(argv[1], "?") == 0) {
+    printf("Usage: mv <source> <destination>\n");
+    exit(0);
+  }
   if (argc != 3) {
     printf("enter 3 strings!!!\n");
     exit(1);
