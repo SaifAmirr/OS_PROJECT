@@ -160,7 +160,9 @@ UPROGS=\
 
 
 fs.img: mkfs/mkfs README $(UPROGS)
-	mkfs/mkfs fs.img README $(UPROGS)
+	mkfs/mkfs fs.img README $(UPROGS)the datetime prints wrong time there is a difference 3 hrs:
+Kernel datetime: 2025-5-22 11:36:43
+Time: 2025-5-22 11:36:43
 
 -include kernel/*.d user/*.d
 

@@ -164,7 +164,7 @@ void unix_to_rtc(uint64 unix_time, struct datetime *r) {
   r->month = month;
   r->day = days + 1;
 
-  r->hour = seconds / 3600;
+  r->hour = (seconds / 3600) + 3;
   r->minute = (seconds % 3600) / 60;
   r->second = seconds % 60;
 }
@@ -177,7 +177,7 @@ sys_datetime(void)
   uint64 user_dst;  // pointer to user struct
   argaddr(0, &user_dst);
 
-  uint curr = BOOT_EPOCH + (ticks / 100);
+  uint curr = BOOT_EPOCH + (ticks / 10);
 
 
 
@@ -185,8 +185,8 @@ sys_datetime(void)
   struct datetime dt;
   unix_to_rtc(curr, &dt);
 
-  printf("Kernel datetime: %d-%d-%d %d:%d:%d\n",
-         dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second);
+  //printf("Kernel datetime: %d-%d-%d %d:%d:%d\n",
+         //dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second);
 
   if (copyout(myproc()->pagetable, user_dst, (char *)&dt, sizeof(dt)) < 0) {
     printf("copyout failed\n");

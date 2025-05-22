@@ -10,12 +10,15 @@ int main(int argc, char *argv[]) {
   int pid;
   int k, nprocess = 10;
   int pids[nprocess];
+  int randoms[] = {5, 5, 5, 5, 5, 1, 1, 1, 1, 1};
   int z, steps = 1000000;
   char buffer_src[1024], buffer_dst[1024];
 
 
   for (k = 0; k < nprocess; k++) {
+
     pid = fork();
+    setpriority(pids[k], randoms[k]);
     if (pid < 0) {
       printf("%d failed in fork!\n", getpid());
       exit(1);
@@ -41,9 +44,8 @@ int main(int argc, char *argv[]) {
   }
 
   for (k = 0; k < nprocess; k++) {
-    int prio = random() %100 + 1;
-    setpriority(pids[k], prio);
-    printf("[pid=%d] created with priority=%d\n", pids[k], prio);
+
+    printf("[pid=%d] created with priority=%d\n", pids[k], randoms[k]);
   }
 
   for (k = 0; k < nprocess; k++) {
